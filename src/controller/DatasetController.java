@@ -1,7 +1,7 @@
 package controller;
 import Database.Database;
-import helper.FileHelper;
-import model.Items;
+import utils.helper.FileHelper;
+import Database.entities.Items;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -13,7 +13,7 @@ public class DatasetController {
         fileHelper = new FileHelper(path);
     }
 
-    public void datasetCreation() {
+    public void createDatasetItems() {
         try{
             fileHelper.fileReader(true);
         }catch (Exception e){
@@ -27,7 +27,7 @@ public class DatasetController {
     private void readItems(ArrayList<String> contentOfFile){
         for(int i=0;i<contentOfFile.size();i++){
             String[] splitItem = contentOfFile.get(i).split(",");
-            database.getItemsMap().put(splitItem[1], new Items(splitItem[0],splitItem[1],Integer.parseInt(splitItem[2]),Double.parseDouble(splitItem[3])));
+            database.getItemsMap().put(splitItem[0], new Items(splitItem[0],splitItem[1],Integer.parseInt(splitItem[2]),Double.parseDouble(splitItem[3])));
         }
     }
 }

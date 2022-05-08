@@ -1,7 +1,7 @@
 package controller;
 
 import Database.Database;
-import helper.FileHelper;
+import utils.helper.FileHelper;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -13,7 +13,13 @@ public class CardController {
         fileHelper = new FileHelper(path);
     }
 
-    public void cardCreation() {
+    public void readCards(ArrayList<String> contentOfFile){
+        for(int i=0;i<contentOfFile.size();i++){
+            database.getCardsSet().add(contentOfFile.get(i));
+        }
+    }
+
+    public void createCards() {
         try{
             fileHelper.fileReader(true);
         }catch (Exception e){
@@ -21,11 +27,5 @@ public class CardController {
             System.exit(0);
         }
         readCards(fileHelper.getContentFile());
-    }
-
-    public void readCards(ArrayList<String> contentOfFile){
-        for(int i=0;i<contentOfFile.size();i++){
-            database.getCardsSet().add(contentOfFile.get(i));
-        }
     }
 }

@@ -1,16 +1,20 @@
 package controller;
 
 import Database.Database;
-import helper.FileHelper;
-import model.Items;
-import model.Order;
-import model.OrderItem;
-import stateHandler.ItemCategoryCapValidation;
-import stateHandler.ItemPresenceValidation;
-import stateHandler.ItemStockValidation;
-import stateHandler.ValidationHandler;
+import utils.helper.FileHelper;
+import Database.entities.Items;
+import Database.entities.Order;
+import Database.entities.OrderItem;
+import Database.entities.OrderOutput;
+import utils.validation.ItemCategoryCapValidation;
+import utils.validation.ItemPresenceValidation;
+import utils.validation.ItemStockValidation;
+import utils.validation.ValidationHandler;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -42,12 +46,12 @@ public class InputContoller {
         getItems(fileHelper.getContentFile());
         return true;
     }
-    public boolean checkOrder() {
-        checkItemStock();
+    public boolean checkForOrder() throws IOException {
+        checkItemInStock();
         return output.size()==0;
     }
 
-    public void calculateTotal() {
+    public void calculateOrderTotal() {
         for(OrderItem item: items){
             total += item.getQuantity()*database.getItemsMap().get(item.getName()).getPrice();
         }
@@ -91,7 +95,7 @@ public class InputContoller {
         }
     }
 
-    public boolean checkItemStock() {
+    public boolean checkItemInStock() throws IOException {
         StringBuilder sb = new StringBuilder();
         database.getOrdersList().add(currentOrder);
         ValidationHandler itemPresence = new ItemPresenceValidation();
@@ -113,8 +117,16 @@ public class InputContoller {
                     sb.append(",");
                 sb.append(orderItem.getName()+"("+item.getQuantity()+")");
             }else{
-                if(!creditCards.contains(orderItem.getCardDetails()))
+                if(!creditCards.contains(orderItem.getCardDetails())){
                     creditCards.add(orderItem.getCardDetails());
+                String cardSet = "/Users/jayanthreddysheri/Documents/202/project/team-project-assassins/Booking/files/Cards - Sheet1.csv";
+                FileWriter fileWriter = new FileWriter(cardSet, true);
+                BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+                PrintWriter printWriter = new PrintWriter(bufferedWriter);
+                printWriter.println();
+                printWriter.println(orderItem.getCardDetails());
+                printWriter.flush();
+                printWriter.close();}
             }
         }
         if(sb.length()>0){
@@ -125,10 +137,13 @@ public class InputContoller {
     }
 
     public void generateOutputFile(){
-        //System.out.println("Zing Zing Amazing");
         if(output.size()==0){
-            output.add("Amount Paid");
-            output.add(Double.toString((currentOrder.getTotalPrice())));
+            output.add("Item,Quantity,price");
+            for (OrderItem item: items){
+                OrderOutput orderOutput = new OrderOutput(item.getName(), item.getQuantity(), item.getQuantity()*database.getItemsMap().get(item.getName()).getPrice());
+                output.add(orderOutput.toString());
+            }
+            output.add("Total Price = "+Double.toString((currentOrder.getTotalPrice())));
             try{
                 fileHelper.writeOuput(output,false);
             }catch (IOException e){
