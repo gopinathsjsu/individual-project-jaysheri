@@ -1,4 +1,4 @@
-package model;
+package Database.entities;
 
 public class OrderItem {
     private String name;

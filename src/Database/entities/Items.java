@@ -1,4 +1,4 @@
-package model;
+package Database.entities;
 
 public class Items {
     private String category;
@@ -8,7 +8,7 @@ public class Items {
 
     public Items() {}
 
-    public Items(String category, String itemName, int quantity, double price){
+    public Items(String itemName, String category, int quantity, double price){
         this.category = category;
         this.itemName = itemName;
         this.quantity = quantity;

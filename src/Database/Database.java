@@ -1,7 +1,7 @@
 package Database;
 
-import model.Items;
-import model.Order;
+import Database.entities.Items;
+import Database.entities.Order;
 
 import java.util.ArrayList;
 import java.util.HashMap;
