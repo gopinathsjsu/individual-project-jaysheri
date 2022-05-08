@@ -1,4 +1,4 @@
-package Database.entities;
+package db.entities;
 
 public class Items {
     private String category;

@@ -1,6 +1,6 @@
 package controller;
 
-import Database.Database;
+import db.Database;
 import utils.helper.FileHelper;
 
 import java.io.IOException;

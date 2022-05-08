@@ -1,14 +1,14 @@
 package controller;
 
-import Database.Database;
+import db.Database;
 import utils.helper.FileHelper;
-import Database.entities.Items;
-import Database.entities.Order;
-import Database.entities.OrderItem;
-import Database.entities.OrderOutput;
-import utils.validation.ItemCategoryCapValidation;
+import db.entities.Items;
+import db.entities.Order;
+import db.entities.OrderItem;
+import db.entities.OrderOutput;
+import utils.validation.ItemCategoryLimitValidation;
 import utils.validation.ItemPresenceValidation;
-import utils.validation.ItemStockValidation;
+import utils.validation.ItemStockLimitValidation;
 import utils.validation.ValidationHandler;
 
 import java.io.BufferedWriter;
@@ -99,8 +99,8 @@ public class InputContoller {
         StringBuilder sb = new StringBuilder();
         database.getOrdersList().add(currentOrder);
         ValidationHandler itemPresence = new ItemPresenceValidation();
-        ValidationHandler itemStock = new ItemStockValidation();
-        ValidationHandler itemCategory = new ItemCategoryCapValidation();
+        ValidationHandler itemStock = new ItemStockLimitValidation();
+        ValidationHandler itemCategory = new ItemCategoryLimitValidation();
         itemPresence.nextHandler(itemStock);
         itemStock.nextHandler(itemCategory);
         if(!itemPresence.validate(items)){

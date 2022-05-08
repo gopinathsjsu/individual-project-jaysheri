@@ -1,4 +1,4 @@
-package Database.entities;
+package db.entities;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;

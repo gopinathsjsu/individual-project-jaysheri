@@ -1,4 +1,4 @@
-package Database.entities;
+package db.entities;
 
 public class Cards {
     private String cardNumber;
