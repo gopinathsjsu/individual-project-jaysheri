@@ -17,7 +17,7 @@ public class ErrorFileHelper implements OutputFileHelper {
 
     @Override
     public void saveFile(Path path) throws IOException {
-        FileWriter errorFile = new FileWriter(path.getParent().toString()+"/ErrorLog_"+new SimpleDateFormat("yyyyMMddHHmm").format(new Date())+".txt");
+        FileWriter errorFile = new FileWriter(path.getParent().getParent().toString()+"/OrderOutput/ErrorLog_"+new SimpleDateFormat("yyyyMMddHHmm").format(new Date())+".txt");
         for(String line:content)
             errorFile.write(line+"\n");
         errorFile.close();
