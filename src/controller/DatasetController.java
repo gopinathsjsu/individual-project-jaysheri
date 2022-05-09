@@ -10,6 +10,7 @@ public class DatasetController {
     private Database database = Database.getInstance();
     private FileHelper fileHelper;
     public DatasetController(String path) throws IOException {
+        System.out.println("ll"+path);
         fileHelper = new FileHelper(path);
     }
 
