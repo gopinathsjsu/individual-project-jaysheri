@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Locale;
 
 public class InputContoller {
     private Database database = Database.getInstance();
@@ -53,7 +54,7 @@ public class InputContoller {
 
     public void calculateOrderTotal() {
         for(OrderItem item: items){
-            total += item.getQuantity()*database.getItemsMap().get(item.getName()).getPrice();
+            total += item.getQuantity()*database.getItemsMap().get(item.getName().toLowerCase()).getPrice();
         }
         currentOrder.setTotalPrice(total);
     }
@@ -64,7 +65,7 @@ public class InputContoller {
 
     public void checkoutOrder() {
         for(OrderItem orderItem: items){
-            Items item = database.getItemsMap().get(orderItem.getName());
+            Items item = database.getItemsMap().get(orderItem.getName().toLowerCase());
             item.setQuantity(item.getQuantity()-orderItem.getQuantity());
         }
         for(String credit:creditCards){
@@ -84,8 +85,9 @@ public class InputContoller {
     public void getItems(ArrayList<String> fileContent){
         for(String line: fileContent){
             String[] item = line.split(",");
-            if(database.getItemsMap().containsKey(item[0])){
-                items.add(new OrderItem(item[0],Integer.parseInt(item[1]),item[2].replaceAll("\\s+","")));
+            if(database.getItemsMap().containsKey(item[0].toLowerCase())){
+                String cardDetails = item.length > 2 ? item[2].replaceAll("\\s+",""): "";
+                items.add(new OrderItem(item[0],Integer.parseInt(item[1]), cardDetails));
             }else{
                 output.add("Item "+item[0]+" not found");
             }
@@ -111,7 +113,7 @@ public class InputContoller {
             output.add("Limit on one of the Categories has exceeded");
         }
         for(OrderItem orderItem: items){
-            Items item = database.getItemsMap().get(orderItem.getName());
+            Items item = database.getItemsMap().get(orderItem.getName().toLowerCase());
             if(item.getQuantity()<orderItem.getQuantity()){
                 if(sb.length()>0)
                     sb.append(",");
@@ -119,14 +121,15 @@ public class InputContoller {
             }else{
                 if(!creditCards.contains(orderItem.getCardDetails())){
                     creditCards.add(orderItem.getCardDetails());
-                String cardSet = "/Users/jayanthreddysheri/Documents/202/project/team-project-assassins/Booking/files/Cards - Sheet1.csv";
-                FileWriter fileWriter = new FileWriter(cardSet, true);
-                BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-                PrintWriter printWriter = new PrintWriter(bufferedWriter);
-                printWriter.println();
-                printWriter.println(orderItem.getCardDetails());
-                printWriter.flush();
-                printWriter.close();}
+//                String cardSet = "/Users/jayanthreddysheri/Documents/202/project/team-project-assassins/Booking/files/Cards - Sheet1.csv";
+//                FileWriter fileWriter = new FileWriter(cardSet, true);
+//                BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+//                PrintWriter printWriter = new PrintWriter(bufferedWriter);
+//                printWriter.println();
+//                printWriter.println(orderItem.getCardDetails());
+//                printWriter.flush();
+//                printWriter.close();
+                }
             }
         }
         if(sb.length()>0){
@@ -135,15 +138,17 @@ public class InputContoller {
         }
         return sb.length()==0;
     }
-
     public void generateOutputFile(){
         if(output.size()==0){
-            output.add("Item,Quantity,price");
+            output.add("Item,Quantity,price, Total Price");
             for (OrderItem item: items){
-                OrderOutput orderOutput = new OrderOutput(item.getName(), item.getQuantity(), item.getQuantity()*database.getItemsMap().get(item.getName()).getPrice());
-                output.add(orderOutput.toString());
+                OrderOutput orderOutput = new OrderOutput(item.getName(), item.getQuantity(), item.getQuantity()*database.getItemsMap().get(item.getName().toLowerCase()).getPrice());
+                if(item == items.get(0)) {
+                    output.add(orderOutput.toString() + "," + Double.toString((currentOrder.getTotalPrice())));
+                } else
+                    output.add(orderOutput.toString());
             }
-            output.add("Total Price = "+Double.toString((currentOrder.getTotalPrice())));
+//            output.add("Total Price = "+Double.toString((currentOrder.getTotalPrice())));
             try{
                 fileHelper.writeOuput(output,false);
             }catch (IOException e){

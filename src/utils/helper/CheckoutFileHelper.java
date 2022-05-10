@@ -17,6 +17,7 @@ public class CheckoutFileHelper implements OutputFileHelper {
 
     @Override
     public void saveFile(Path path) throws IOException {
+        System.out.println(path.getParent().toString());
         FileWriter checkoutFile = new FileWriter(path.getParent().getParent().toString()+"/OrderOutput/OrderSuccessfulFile_"+new SimpleDateFormat("yyyyMMddHHmm").format(new Date())+".csv");
         for(String line:content)
             checkoutFile.write(line+"\n");

@@ -11,7 +11,7 @@ public class ItemPresenceValidation implements ValidationHandler{
     public boolean validate(ArrayList<OrderItem> items) {
         Database database = Database.getInstance();
         for(OrderItem orderItem: items){
-            if(!database.getItemsMap().containsKey(orderItem.getName())){
+            if(!database.getItemsMap().containsKey(orderItem.getName().toLowerCase())){
                 return false;
             }
         }

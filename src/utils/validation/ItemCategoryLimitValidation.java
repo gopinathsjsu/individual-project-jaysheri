@@ -5,6 +5,7 @@ import db.entities.OrderItem;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 
 public class ItemCategoryLimitValidation implements ValidationHandler{
     private ValidationHandler next= null;
@@ -16,7 +17,7 @@ public class ItemCategoryLimitValidation implements ValidationHandler{
         HashMap<String,Integer> map = new HashMap<>();
         Database database = Database.getInstance();
         for(OrderItem orderItem: items){
-            map.put(database.getItemsMap().get(orderItem.getName()).getCategory(),map.getOrDefault(database.getItemsMap().get(orderItem.getName()).getCategory(),0)+orderItem.getQuantity());
+            map.put(database.getItemsMap().get(orderItem.getName().toLowerCase()).getCategory(),map.getOrDefault(database.getItemsMap().get(orderItem.getName().toLowerCase()).getCategory(),0)+orderItem.getQuantity());
         }
         if(map.getOrDefault("Luxury",0)>luxCap){
             return false;

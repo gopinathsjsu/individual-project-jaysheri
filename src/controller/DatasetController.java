@@ -28,7 +28,7 @@ public class DatasetController {
     private void readItems(ArrayList<String> contentOfFile){
         for(int i=0;i<contentOfFile.size();i++){
             String[] splitItem = contentOfFile.get(i).split(",");
-            database.getItemsMap().put(splitItem[0], new Items(splitItem[0],splitItem[1],Integer.parseInt(splitItem[2]),Double.parseDouble(splitItem[3])));
+            database.getItemsMap().put(splitItem[0].toLowerCase(), new Items(splitItem[0],splitItem[1],Integer.parseInt(splitItem[2]),Double.parseDouble(splitItem[3])));
         }
     }
 }

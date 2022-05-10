@@ -11,7 +11,7 @@ public class ItemStockLimitValidation implements ValidationHandler{
     public boolean validate(ArrayList<OrderItem> items) {
         Database database = Database.getInstance();
         for(OrderItem orderItem: items){
-            if(database.getItemsMap().get(orderItem.getName()).getQuantity()<orderItem.getQuantity()){
+            if(database.getItemsMap().get(orderItem.getName().toLowerCase()).getQuantity()<orderItem.getQuantity()){
                 return false;
             }
         }
